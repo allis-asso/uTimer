@@ -54,20 +54,9 @@
 
     <LinearLayout
 	    android:id="@+id/buttonLayout"
+	    android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-        
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/item1" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/item2" />
 
     </LinearLayout>
 
