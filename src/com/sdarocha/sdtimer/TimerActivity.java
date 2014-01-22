@@ -11,11 +11,13 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 @SuppressWarnings("unused")
 public class TimerActivity extends Activity {
 	TextView timerView = null;
+	ProgressBar timerProgressView = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,7 @@ public class TimerActivity extends Activity {
 		setContentView(R.layout.activity_timer);
 		
 		timerView = (TextView) findViewById(R.id.textViewCounter);
+		timerProgressView = (ProgressBar) findViewById(R.id.progressBar1);
 		final View buttonPause = findViewById(R.id.button_pause);
 		final View buttonStop = findViewById(R.id.button_stop);
 
@@ -38,7 +41,9 @@ public class TimerActivity extends Activity {
 				long secs = 	(currentTime % 60);
 				String display = String.format("%02d:%02d:%02d", hours, minutes, secs); 
 				timerView.setText(display);
-			
+				
+				timerProgressView.setMax( (int) initialTime);
+				timerProgressView.setProgress( (int)currentTime);
 			}
 		};
 		timer.addMonitor(refreshTimeView);
