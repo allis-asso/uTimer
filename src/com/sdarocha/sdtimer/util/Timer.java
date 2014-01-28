@@ -71,7 +71,7 @@ public class Timer {
 	 * @param minutes
 	 * @param seconds
 	 */
-	public void setTimer( int seconds)
+	public void setTimer( long seconds)
 	{
 		setTimer( seconds, true);
 	}
@@ -99,13 +99,8 @@ public class Timer {
 		mCountDown = new CountDownTimer(seconds * 1000, 1000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
-				mLastTick = millisUntilFinished;
-				Iterator<Monitor> itMonitor = mMonitor.iterator();
-				while(itMonitor.hasNext())
-				{
-					Monitor not = itMonitor.next();
-					not.Refresh( mInitialCount, millisUntilFinished/1000);
-				}
+				mLastTick = millisUntilFinished/1000;
+				refreshMonitors(mLastTick);
 			}
 			
 			@Override
@@ -118,14 +113,25 @@ public class Timer {
 				}
 			}
 		};
+		refreshMonitors(seconds);
 	}
 
+	protected void refreshMonitors(long currentTime )
+	{
+		Iterator<Monitor> itMonitor = mMonitor.iterator();
+		while(itMonitor.hasNext())
+		{
+			Monitor not = itMonitor.next();
+			not.Refresh( mInitialCount, currentTime);
+		}	
+	}
 	/**
 	 * Starts the count down
 	 */
 	public void start()
 	{
 		mCountDown.start();
+		refreshMonitors(mLastTick);
 	}
 	
 	/**
@@ -134,6 +140,8 @@ public class Timer {
 	public void stop ()
 	{
 		mCountDown.cancel();
+		mLastTick = mInitialCount;
+		setTimer(mInitialCount);
 	}
 	
 	/**
@@ -143,7 +151,7 @@ public class Timer {
 	public void pause ()
 	{
 		mCountDown.cancel();
-		setTimer(mLastTick/1000, false);
+		setTimer(mLastTick, false);
 	}
 	
 	

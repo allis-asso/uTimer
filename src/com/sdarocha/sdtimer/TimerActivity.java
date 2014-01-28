@@ -4,9 +4,7 @@ import com.sdarocha.sdtimer.util.Monitor;
 import com.sdarocha.sdtimer.util.Timer;
 
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.app.Activity;
-import android.text.Layout;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -14,10 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-@SuppressWarnings("unused")
 public class TimerActivity extends Activity {
 	TextView timerView = null;
 	ProgressBar timerProgressView = null;
+	protected boolean isPaused = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,18 +53,18 @@ public class TimerActivity extends Activity {
 
 		//TODO Ajouter une image play
 		buttonPause.setOnClickListener(new View.OnClickListener() {
-			protected boolean _isPaused = false;
+			
 			@Override
 			public void onClick(View v) {
 				Timer timer = Timer.getTimer();
-				if( _isPaused == true)
+				if( isPaused == true)
 				{
-					_isPaused = false;
+					isPaused = false;
 					timer.start();
 				}
 				else
 				{
-					_isPaused = true;
+					isPaused = true;
 					timer.pause();
 				}
 			}
@@ -76,6 +74,8 @@ public class TimerActivity extends Activity {
 			public void onClick(View v) {
 				Timer timer = Timer.getTimer();
 				timer.stop();
+				isPaused = true;
+
 			}
 		});
 	}
