@@ -1,4 +1,4 @@
-package com.sdarocha.sdtimer.util;
+package fr.lint.utimer.util;
 
 /**
  * Implement this class to handle the Timer stop event.

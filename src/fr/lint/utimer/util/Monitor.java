@@ -1,4 +1,4 @@
-package com.sdarocha.sdtimer.util;
+package fr.lint.utimer.util;
 
 /**
  * Implement this class to get notified of the time ellapse every second.
