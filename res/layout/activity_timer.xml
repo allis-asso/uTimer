@@ -52,12 +52,21 @@
             android:text="@string/stop" />
     </LinearLayout>
 
-    <LinearLayout
-	    android:id="@+id/buttonLayout"
-	    android:orientation="vertical"
+    <ScrollView
+        android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-    </LinearLayout>
+    
+        <LinearLayout
+            android:id="@+id/buttonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+        </LinearLayout>
+
+        
+    </ScrollView>
 
 </LinearLayout>
