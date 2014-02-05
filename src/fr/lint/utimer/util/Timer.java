@@ -17,10 +17,12 @@ import android.os.CountDownTimer;
  */
 public class Timer {
 	static Timer mTimer = null;
+	public enum TimerStatus { eTimerStatusStop,eTimerStatusPlay, eTimerStatusPause };
 	private CountDownTimer mCountDown = null;
 	private long mInitialCount = 0; /** Initial count in seconds*/
 	private LinkedList<Notification> mNotfications = null;
 	private LinkedList<Monitor> mMonitor = null;
+	private TimerStatus status = TimerStatus.eTimerStatusStop;
 	
 	private long mLastTick = 0; /** last tick in milliseconds (used for pause)*/
 	
@@ -36,6 +38,10 @@ public class Timer {
 		return mTimer;
 	}
 	
+	public TimerStatus getStatus() {
+		return status;
+	}
+
 	/**
 	 * Constructor only to be used by the factory method 
 	 */
@@ -125,6 +131,7 @@ public class Timer {
 	 */
 	public void start()
 	{
+		status = TimerStatus.eTimerStatusPlay;
 		mCountDown.start();
 	}
 	
@@ -133,6 +140,7 @@ public class Timer {
 	 */
 	public void stop ()
 	{
+		status = TimerStatus.eTimerStatusStop;
 		mCountDown.cancel();
 	}
 	
@@ -142,6 +150,7 @@ public class Timer {
 	 */
 	public void pause ()
 	{
+		status = TimerStatus.eTimerStatusPause;
 		mCountDown.cancel();
 		setTimer(mLastTick/1000, false);
 	}
