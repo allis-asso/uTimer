@@ -132,7 +132,10 @@ public class Timer {
 	public void start()
 	{
 		status = TimerStatus.eTimerStatusPlay;
-		mCountDown.start();
+		if(mCountDown != null)
+		{
+			mCountDown.start();
+		}
 	}
 	
 	/**
@@ -141,7 +144,10 @@ public class Timer {
 	public void stop ()
 	{
 		status = TimerStatus.eTimerStatusStop;
-		mCountDown.cancel();
+		if(mCountDown != null)
+		{
+			mCountDown.cancel();
+		}
 	}
 	
 	/**
@@ -151,7 +157,10 @@ public class Timer {
 	public void pause ()
 	{
 		status = TimerStatus.eTimerStatusPause;
-		mCountDown.cancel();
+		if(mCountDown != null)
+		{
+			mCountDown.cancel();
+		}
 		setTimer(mLastTick/1000, false);
 	}
 	
