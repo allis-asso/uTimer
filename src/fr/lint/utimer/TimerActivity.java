@@ -31,7 +31,6 @@ public class TimerActivity extends Activity {
 		final View buttonStop = findViewById(R.id.button_stop);
 
 		// Enable the timer
-
 		Timer timer = Timer.getTimer();
 		Monitor refreshTimeView = new Monitor() {
 			
@@ -44,7 +43,7 @@ public class TimerActivity extends Activity {
 				timerView.setText(display);
 				
 				timerProgressView.setMax( (int) initialTime);
-				timerProgressView.setProgress( (int)currentTime);
+				timerProgressView.setProgress( (int)(initialTime-currentTime));
 			}
 		};
 		timer.addMonitor(refreshTimeView);
