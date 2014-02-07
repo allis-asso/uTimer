@@ -17,14 +17,17 @@ import android.os.CountDownTimer;
  */
 public class Timer {
 	static Timer mTimer = null;
+	
 	public enum TimerStatus { eTimerStatusStop,eTimerStatusPlay, eTimerStatusPause };
+	private TimerStatus status = TimerStatus.eTimerStatusStop;
+
 	private CountDownTimer mCountDown = null;
+	
 	private long mInitialCount = 0; /** Initial count in seconds*/
+	private long mLastTick = 0; /** last tick in seconds (used for pause)*/
+	
 	private LinkedList<Notification> mNotfications = null;
 	private LinkedList<Monitor> mMonitor = null;
-	private TimerStatus status = TimerStatus.eTimerStatusStop;
-	
-	private long mLastTick = 0; /** last tick in milliseconds (used for pause)*/
 	
 	/**
 	 * Factory method handles a singleton object of Timer.
@@ -105,13 +108,8 @@ public class Timer {
 		mCountDown = new CountDownTimer(seconds * 1000, 1000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
-				mLastTick = millisUntilFinished;
-				Iterator<Monitor> itMonitor = mMonitor.iterator();
-				while(itMonitor.hasNext())
-				{
-					Monitor not = itMonitor.next();
-					not.Refresh( mInitialCount, millisUntilFinished/1000);
-				}
+				mLastTick = millisUntilFinished/1000;
+				refresh(mLastTick);
 			}
 			
 			@Override
@@ -126,6 +124,16 @@ public class Timer {
 		};
 	}
 
+	private void refresh( long secsUntilFinished)
+	{
+		Iterator<Monitor> itMonitor = mMonitor.iterator();
+		while(itMonitor.hasNext())
+		{
+			Monitor not = itMonitor.next();
+			not.Refresh( mInitialCount, secsUntilFinished);
+		}
+	}
+		
 	/**
 	 * Starts the count down
 	 */
@@ -136,6 +144,7 @@ public class Timer {
 		{
 			mCountDown.start();
 		}
+		refresh(mInitialCount);
 	}
 	
 	/**
@@ -148,6 +157,8 @@ public class Timer {
 		{
 			mCountDown.cancel();
 		}
+		setTimer(mInitialCount, false);
+		refresh(mInitialCount);
 	}
 	
 	/**
@@ -161,7 +172,8 @@ public class Timer {
 		{
 			mCountDown.cancel();
 		}
-		setTimer(mLastTick/1000, false);
+		setTimer(mLastTick, false);
+		refresh(mLastTick);
 	}
 	
 	
