@@ -31,7 +31,6 @@ public class TimerActivity extends Activity {
 		final View buttonStop = findViewById(R.id.button_stop);
 
 		// Enable the timer
-
 		Timer timer = Timer.getTimer();
 		Monitor refreshTimeView = new Monitor() {
 			

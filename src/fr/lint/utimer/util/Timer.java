@@ -105,6 +105,7 @@ public class Timer {
 			mCountDown = null;
 		}
 
+		mLastTick = mInitialCount;
 		mCountDown = new CountDownTimer(seconds * 1000, 1000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
@@ -114,6 +115,7 @@ public class Timer {
 			
 			@Override
 			public void onFinish() {
+				stop();
 				Iterator<Notification> itNotification = mNotfications.iterator();
 				while(itNotification.hasNext())
 				{
@@ -122,6 +124,7 @@ public class Timer {
 				}
 			}
 		};
+		refresh(mLastTick);
 	}
 
 	private void refresh( long secsUntilFinished)
@@ -158,7 +161,6 @@ public class Timer {
 			mCountDown.cancel();
 		}
 		setTimer(mInitialCount, false);
-		refresh(mInitialCount);
 	}
 	
 	/**
@@ -173,7 +175,6 @@ public class Timer {
 			mCountDown.cancel();
 		}
 		setTimer(mLastTick, false);
-		refresh(mLastTick);
 	}
 	
 	
@@ -184,6 +185,7 @@ public class Timer {
 	public void addMonitor(Monitor mon)
 	{
 		mMonitor.add(mon);
+		refresh(mLastTick);
 	}
 	
 	/**
