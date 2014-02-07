@@ -44,7 +44,7 @@ public class TimerActivity extends Activity {
 				timerView.setText(display);
 				
 				timerProgressView.setMax( (int) initialTime);
-				timerProgressView.setProgress( (int)currentTime);
+				timerProgressView.setProgress( (int)(initialTime-currentTime));
 			}
 		};
 		timer.addMonitor(refreshTimeView);
