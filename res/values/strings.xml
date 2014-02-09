@@ -7,5 +7,9 @@
     <string name="pause">Pause</string>
     <string name="stop">Stop</string>
     <string name="start">Start</string>
-        
+    <string name="rem_timer">Remove the timer</string>
+    <string name="add_timer">Add a timer</string>
+
+    <string name="OK">OK</string>
+    
 </resources>

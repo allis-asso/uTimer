@@ -1,6 +1,7 @@
 package fr.lint.utimer;
 
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import fr.lint.utimer.util.Monitor;
@@ -8,10 +9,11 @@ import fr.lint.utimer.util.Timer;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnLongClickListener;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 public class TimerActivity extends Activity {
 	TextView timerView = null;
 	ProgressBar timerProgressView = null;
+	ArrayList<TimerButton> buttons = new ArrayList<TimerButton>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +36,6 @@ public class TimerActivity extends Activity {
 		// Enable the timer
 		Timer timer = Timer.getTimer();
 		Monitor refreshTimeView = new Monitor() {
-			
 			@Override
 			public void Refresh(long initialTime, long currentTime) {
 				long hours = 	(currentTime % (60*60*60)) / (60*60);
@@ -92,32 +94,33 @@ public class TimerActivity extends Activity {
 	{
 		final LinearLayout buttonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
 
-		Button dynaButton = new Button(this);
+		TimerButton dynaButton = new TimerButton(this, hours, minutes, seconds);
 		
-		String display = String.format( Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
-		dynaButton.setText(display);
-
-		dynaButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Timer timer = Timer.getTimer();
-				timer.setTimer(hours, minutes, seconds);
-				// TODO Implement notification				
-				timer.start();
-			}
-		});
-		
-		dynaButton.setOnLongClickListener(new OnLongClickListener() {
-			
-			@Override
-			public boolean onLongClick(View v) {
-				// TODO Auto-generated method stub
-				
-				return true;
-			}
-		});
-
+		buttons.add(dynaButton);
 		buttonLayout.addView(dynaButton);
 		return true;
+	}
+	
+	public void showTimePickDialog(int hours, int minutes, int seconds) {
+		// DialogFragment.show() will take care of adding the fragment
+		// in a transaction.  We also want to remove any currently showing
+		// dialog, so make our own transaction and take care of that here.
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+		
+		// Prepare args
+		Bundle b = new Bundle();
+		b.putInt(TimePickerDialogFragment.HOUR, hours);
+		b.putInt(TimePickerDialogFragment.MINUTE, minutes);
+		b.putInt(TimePickerDialogFragment.SECOND, seconds);
+
+		// Create and show the dialog.
+		DialogFragment newFragment = new TimePickerDialogFragment();
+		newFragment.setArguments(b);
+		newFragment.show(ft, "dialog");
 	}
 }
