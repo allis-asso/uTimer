@@ -12,16 +12,19 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.TimePickerDialog;
 import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
-public class TimerActivity extends Activity {
+public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSetListener {
 	TextView timerView = null;
 	ProgressBar timerProgressView = null;
 	ArrayList<TimerButton> buttons = new ArrayList<TimerButton>();
+	protected int lastButtonEdited = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -97,11 +100,13 @@ public class TimerActivity extends Activity {
 		TimerButton dynaButton = new TimerButton(this, hours, minutes, seconds);
 		
 		buttons.add(dynaButton);
+		dynaButton.setPosition(buttons.lastIndexOf(dynaButton));
 		buttonLayout.addView(dynaButton);
 		return true;
 	}
 	
-	public void showTimePickDialog(int hours, int minutes, int seconds) {
+	public void showTimePickDialog( TimerButton button) {
+		
 		// DialogFragment.show() will take care of adding the fragment
 		// in a transaction.  We also want to remove any currently showing
 		// dialog, so make our own transaction and take care of that here.
@@ -114,13 +119,20 @@ public class TimerActivity extends Activity {
 		
 		// Prepare args
 		Bundle b = new Bundle();
-		b.putInt(TimePickerDialogFragment.HOUR, hours);
-		b.putInt(TimePickerDialogFragment.MINUTE, minutes);
-		b.putInt(TimePickerDialogFragment.SECOND, seconds);
+		b.putInt(TimePickerDialogFragment.HOUR, button.getHours());
+		b.putInt(TimePickerDialogFragment.MINUTE, button.getMinutes());
+		b.putInt(TimePickerDialogFragment.SECOND, button.getSeconds());
+		lastButtonEdited = button.getPosition();
 
 		// Create and show the dialog.
 		DialogFragment newFragment = new TimePickerDialogFragment();
 		newFragment.setArguments(b);
 		newFragment.show(ft, "dialog");
 	}
+	
+	@Override
+	public void onTimeSet(TimePicker arg0, int minutes, int seconds) {
+		buttons.get(lastButtonEdited).setTime(0, minutes, seconds);
+	}
+	
 }
