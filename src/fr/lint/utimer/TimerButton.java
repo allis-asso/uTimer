@@ -68,6 +68,11 @@ public class TimerButton extends Button {
 		this.position = position;
 	}
 
+
+	public long getTime() {
+		return ((hours*60+minutes)*60 + seconds) ;
+	}
+
 	
 
 }

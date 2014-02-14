@@ -2,6 +2,8 @@ package fr.lint.utimer;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Locale;
 
 import fr.lint.utimer.util.Monitor;
@@ -29,6 +31,8 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 	ProgressBar timerProgressView = null;
 	ArrayList<TimerButton> buttons = new ArrayList<TimerButton>();
 	protected int lastButtonEdited = 0;
+	private UserSettings settings = null;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,8 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 		
 		// Enable the Alert
 		timer.addNotification(this);
+		
+		settings = new UserSettings(getPreferences(Context.MODE_PRIVATE));
 		
 		addTimerButton(0, 0, 30);
 		addTimerButton(0, 1, 0);
@@ -140,9 +146,28 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 	@Override
 	public void onTimeSet(TimePicker arg0, int minutes, int seconds) {
 		buttons.get(lastButtonEdited).setTime(0, minutes, seconds);
+		saveTimers();
 	}
+	
+	private void saveTimers()
+	{
+		Iterator<TimerButton> it = buttons.iterator();
+		LinkedList<Long> times = new LinkedList<Long>();
+		
+		while( it.hasNext())
+		{
+			times.add( it.next().getTime());
+		}
+		settings.setTimings(times);
+	}
+	
+
 	@Override
 	public void onTimerStop() {
+		// Wake up the screen
+//		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+//		pm.wakeUp( System.currentTimeMillis());
+		
 		// The screen can go off again
 		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
