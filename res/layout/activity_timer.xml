@@ -20,7 +20,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/pause" />
+            android:text="@string/pause"
+            android:onClick="onStartPause" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -49,7 +50,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_weight="1"
-            android:text="@string/stop" />
+            android:text="@string/stop"
+            android:onClick="onStop" />
     </LinearLayout>
 
     <ScrollView

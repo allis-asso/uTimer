@@ -7,7 +7,7 @@ package fr.lint.utimer.util;
  */
 public abstract class Monitor {
 	/**
-	 * This method will be called avery second by {@link Timer}
+	 * This method will be called every second by {@link Timer}
 	 * @param initialTime initial count down time
 	 * @param currentTime time to run until the end of the timer
 	 */

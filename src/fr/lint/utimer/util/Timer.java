@@ -26,9 +26,9 @@ public class Timer {
 	private long mInitialCount = 0; /** Initial count in seconds*/
 	private long mLastTick = 0; /** last tick in seconds (used for pause)*/
 	
-	private LinkedList<Notification> mNotfications = null;
+	private LinkedList<TimerAlert> mNotfications = null;
 	private LinkedList<Monitor> mMonitor = null;
-	
+		
 	/**
 	 * Factory method handles a singleton object of Timer.
 	 * @return the Timer object
@@ -50,7 +50,7 @@ public class Timer {
 	 */
 	protected Timer()
 	{
-		mNotfications = new LinkedList<Notification>();
+		mNotfications = new LinkedList<TimerAlert>();
 		mMonitor = new LinkedList<Monitor>();
 	}
 	
@@ -116,11 +116,11 @@ public class Timer {
 			@Override
 			public void onFinish() {
 				stop();
-				Iterator<Notification> itNotification = mNotfications.iterator();
+				Iterator<TimerAlert> itNotification = mNotfications.iterator();
 				while(itNotification.hasNext())
 				{
-					Notification not = itNotification.next();
-					not.onStop();
+					TimerAlert not = itNotification.next();
+					not.onTimerStop();
 				}
 			}
 		};
@@ -146,6 +146,12 @@ public class Timer {
 		if(mCountDown != null)
 		{
 			mCountDown.start();
+			Iterator<TimerAlert> itNotification = mNotfications.iterator();
+			while(itNotification.hasNext())
+			{
+				TimerAlert not = itNotification.next();
+				not.onTimerStart();
+			}
 		}
 		refresh(mInitialCount);
 	}
@@ -159,6 +165,13 @@ public class Timer {
 		if(mCountDown != null)
 		{
 			mCountDown.cancel();
+			Iterator<TimerAlert> itNotification = mNotfications.iterator();
+			while(itNotification.hasNext())
+			{
+				TimerAlert not = itNotification.next();
+				not.onTimerForcedStop();
+			}
+
 		}
 		setTimer(mInitialCount, false);
 	}
@@ -173,6 +186,12 @@ public class Timer {
 		if(mCountDown != null)
 		{
 			mCountDown.cancel();
+			Iterator<TimerAlert> itNotification = mNotfications.iterator();
+			while(itNotification.hasNext())
+			{
+				TimerAlert not = itNotification.next();
+				not.onTimerPause();
+			}
 		}
 		setTimer(mLastTick, false);
 	}
@@ -207,13 +226,13 @@ public class Timer {
 	 * Add a notification that will be called at the end of the count down
 	 * @param not
 	 */
-	public void addNotification( Notification not)
+	public void addNotification( TimerAlert not)
 	{
 		mNotfications.add(not);
 	}
 
 	/**
-	 * Stops the timer and release the {@link Notification}s
+	 * Stops the timer and release the {@link TimerAlert}s
 	 */
 	public void releaseNotification()
 	{

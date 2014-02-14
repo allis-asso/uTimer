@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import fr.lint.utimer.util.Monitor;
-import fr.lint.utimer.util.Notification;
+import fr.lint.utimer.util.TimerAlert;
 import fr.lint.utimer.util.Timer;
 
 import android.os.Bundle;
@@ -18,12 +18,13 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSetListener {
+public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSetListener, TimerAlert {
 	TextView timerView = null;
 	ProgressBar timerProgressView = null;
 	ArrayList<TimerButton> buttons = new ArrayList<TimerButton>();
@@ -36,8 +37,6 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 		
 		timerView = (TextView) findViewById(R.id.textViewCounter);
 		timerProgressView = (ProgressBar) findViewById(R.id.progressBar1);
-		final View buttonPause = findViewById(R.id.button_pause);
-		final View buttonStop = findViewById(R.id.button_stop);
 
 		// Enable the timer
 		Timer timer = Timer.getTimer();
@@ -59,48 +58,39 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 		timer.addMonitor(refreshTimeView);
 		
 		// Enable the Alert
-		Notification notif = new Notification() {
-			
-			@Override
-			public void onStop() {
-				 Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
-				 v.vibrate(500);
-			}
-		};
-		timer.addNotification(notif);
+		timer.addNotification(this);
 		
 		addTimerButton(0, 0, 30);
 		addTimerButton(0, 1, 0);
 		addTimerButton(0, 1, 30);
 		addTimerButton(0, 2, 0);
+	}
+	
+	public void onStartPause(View v)
+	{
+		Timer timer = Timer.getTimer();
+		switch(timer.getStatus())
+		{
+		case eTimerStatusStop:
+		case eTimerStatusPause:
+			timer.start();
+			break;
+		case eTimerStatusPlay:
+			timer.pause();
+			break;
+		default:
+			break;
+		}
+		
+	}
 
-		//TODO Ajouter une image play
-		buttonPause.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Timer timer = Timer.getTimer();
-				switch(timer.getStatus())
-				{
-				case eTimerStatusStop:
-				case eTimerStatusPause:
-					timer.start();
-					break;
-				case eTimerStatusPlay:
-					timer.pause();
-					break;
-				default:
-					break;
-				}
-			}
-		});
-		buttonStop.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Timer timer = Timer.getTimer();
-				timer.stop();
-			}
-		});
+	public void onStop(View v)
+	{
+		// The screen can go off again
+		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		
+		Timer timer = Timer.getTimer();
+		timer.stop();
 	}
 
 	@Override
@@ -150,6 +140,36 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 	@Override
 	public void onTimeSet(TimePicker arg0, int minutes, int seconds) {
 		buttons.get(lastButtonEdited).setTime(0, minutes, seconds);
+	}
+	@Override
+	public void onTimerStop() {
+		// The screen can go off again
+		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+		// Vibration
+		Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		v.vibrate(500);
+		
+	}
+
+	@Override
+	public void onTimerStart() {
+		// prevent the screen shut off when the timer is running
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+	}
+
+	@Override
+	public void onTimerPause() {
+		// The screen can go off again
+		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		
+	}
+
+	@Override
+	public void onTimerForcedStop() {
+		// The screen can go off again
+		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		
 	}
 	
 }
