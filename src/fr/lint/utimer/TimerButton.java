@@ -23,7 +23,6 @@ public class TimerButton extends Button {
 			public void onClick(View v) {
 				Timer timer = Timer.getTimer();
 				timer.setTimer( TimerButton.this.hours, TimerButton.this.minutes, TimerButton.this.seconds);
-				// TODO Implement notification				
 				timer.start();
 			}
 		});

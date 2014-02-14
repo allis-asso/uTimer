@@ -5,14 +5,17 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import fr.lint.utimer.util.Monitor;
+import fr.lint.utimer.util.Notification;
 import fr.lint.utimer.util.Timer;
 
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -38,6 +41,8 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 
 		// Enable the timer
 		Timer timer = Timer.getTimer();
+		
+		// Enable the refresh
 		Monitor refreshTimeView = new Monitor() {
 			@Override
 			public void Refresh(long initialTime, long currentTime) {
@@ -52,6 +57,18 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 			}
 		};
 		timer.addMonitor(refreshTimeView);
+		
+		// Enable the Alert
+		Notification notif = new Notification() {
+			
+			@Override
+			public void onStop() {
+				 Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+				 v.vibrate(500);
+			}
+		};
+		timer.addNotification(notif);
 		
 		addTimerButton(0, 0, 30);
 		addTimerButton(0, 1, 0);
