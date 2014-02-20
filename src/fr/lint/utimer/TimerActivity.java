@@ -22,6 +22,7 @@ import android.content.Context;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,6 +34,7 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 	ArrayList<TimerButton> buttons = new ArrayList<TimerButton>();
 	protected int lastButtonEdited = 0;
 	private UserSettings settings = null;
+	private ImageButton playButton = null;
 	
 
 	@Override
@@ -42,7 +44,8 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 		
 		timerView = (TextView) findViewById(R.id.textViewCounter);
 		timerProgressView = (ProgressBar) findViewById(R.id.progressBar1);
-
+		playButton = (ImageButton) findViewById(R.id.button_pause);
+		
 		// Enable the timer
 		Timer timer = Timer.getTimer();
 		
@@ -81,6 +84,14 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 			addTimerButton(time.getHours(), time.getMinutes(), time.getSeconds());
 		}
 
+	}
+	
+	private void setPlayButton( boolean isPlay)
+	{
+		if( isPlay)
+			playButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_play));
+		else
+			playButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_pause));
 	}
 	public void onStartPause(View v)
 	{
@@ -181,6 +192,8 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 		// The screen can go off again
 		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+		setPlayButton(true);
+		
 		// Vibration
 		Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		v.vibrate(500);
@@ -191,6 +204,8 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 	public void onTimerStart() {
 		// prevent the screen shut off when the timer is running
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		
+		setPlayButton(false);
 	}
 
 	@Override
@@ -198,12 +213,16 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 		// The screen can go off again
 		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		
+		setPlayButton(true);
+		
 	}
 
 	@Override
 	public void onTimerForcedStop() {
 		// The screen can go off again
 		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		
+		setPlayButton(true);
 		
 	}
 	
