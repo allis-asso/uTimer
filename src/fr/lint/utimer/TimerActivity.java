@@ -20,6 +20,7 @@ import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -127,6 +128,19 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle presses on the action bar items
+	    switch (item.getItemId()) {
+	        case R.id.action_add_time:
+	    		addTimerButton(0, 0, 0);
+	    		saveTimers();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
 	public boolean addTimerButton ( final int hours, final int minutes, final int seconds)
 	{
 		final LinearLayout buttonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
@@ -225,5 +239,4 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 		setPlayButton(true);
 		
 	}
-	
 }
