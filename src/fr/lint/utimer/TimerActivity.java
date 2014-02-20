@@ -78,7 +78,7 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 		while( itTimer.hasNext())
 		{
 			Time time = new Time (itTimer.next());
-			addTimerButton(time.getHours(), time.getMinutes(), time.getMinutes());
+			addTimerButton(time.getHours(), time.getMinutes(), time.getSeconds());
 		}
 
 	}
