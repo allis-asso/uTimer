@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Locale;
 
 import fr.lint.utimer.util.Monitor;
+import fr.lint.utimer.util.Time;
 import fr.lint.utimer.util.TimerAlert;
 import fr.lint.utimer.util.Timer;
 
@@ -66,12 +67,21 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 		
 		settings = new UserSettings(getPreferences(Context.MODE_PRIVATE));
 		
-		addTimerButton(0, 0, 30);
-		addTimerButton(0, 1, 0);
-		addTimerButton(0, 1, 30);
-		addTimerButton(0, 2, 0);
+		loadTimerButtons();
 	}
 	
+	protected void loadTimerButtons()
+	{
+		LinkedList<Long> timers = settings.getTimings();
+		Iterator<Long> itTimer = timers.iterator();
+		
+		while( itTimer.hasNext())
+		{
+			Time time = new Time (itTimer.next());
+			addTimerButton(time.getHours(), time.getMinutes(), time.getMinutes());
+		}
+
+	}
 	public void onStartPause(View v)
 	{
 		Timer timer = Timer.getTimer();

@@ -13,7 +13,6 @@ public class UserSettings {
 	private LinkedList<Long> timers = new LinkedList<Long>();
 
 	public UserSettings(SharedPreferences settings) {
-		// TODO Auto-generated constructor stub
 		this.settings = settings;
 		
 		long nb_buttons = settings.getLong(NUMBER_OF_BUTTONS, 4);
@@ -50,7 +49,7 @@ public class UserSettings {
 		int i = 0;
 		while( it.hasNext())
 		{
-			settings.getLong(BUTTON_ + i++, it.next());
+			editor.putLong(BUTTON_ + i++, it.next());
 		}
 
 		// Commit the edits!
