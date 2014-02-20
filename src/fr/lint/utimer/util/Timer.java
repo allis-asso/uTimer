@@ -105,7 +105,7 @@ public class Timer {
 			mCountDown = null;
 		}
 
-		mLastTick = mInitialCount;
+		mLastTick = seconds;
 		mCountDown = new CountDownTimer(seconds * 1000, 1000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
