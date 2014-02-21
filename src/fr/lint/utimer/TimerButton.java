@@ -4,9 +4,11 @@ import java.util.Locale;
 
 import fr.lint.utimer.util.Timer;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.widget.Button;
 
+@SuppressLint("ViewConstructor")
 public class TimerButton extends Button {
 	protected int hours = 0;
 	protected int minutes = 0;
@@ -72,7 +74,5 @@ public class TimerButton extends Button {
 	public long getTime() {
 		return ((hours*60+minutes)*60 + seconds) ;
 	}
-
-	
 
 }
