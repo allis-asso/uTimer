@@ -2,34 +2,163 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:layout_gravity="center">
 
-    <Button
-        android:id="@+id/button_time_picker_remove"
-        android:layout_width="match_parent"
+    <GridLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/rem_timer" />
+        android:layout_gravity="center"
+        android:columnCount="3" >
 
-    <TimePicker
-        android:id="@+id/timePicker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_column="0"
+            android:layout_gravity="center"
+            android:layout_row="0"
+            android:ems="5"
+            android:text="@string/hours"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        <EditText
+            android:id="@+id/editHours"
+            android:layout_column="0"
+            android:layout_gravity="center"
+            android:layout_row="2"
+            android:ems="2"
+            android:inputType="number"
+            android:text="@string/zerozero" />
 
-<!--         <Button
-            android:id="@+id/button_time_picker_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cancel" />
- -->
         <Button
-            android:id="@+id/button_time_picker_ok"
+            android:id="@+id/button_hour_add"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_column="0"
+            android:layout_gravity="center"
+            android:layout_row="1"
+            android:text="@string/more" />
+
+        <Button
+            android:id="@+id/button_hour_rem"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_column="0"
+            android:layout_gravity="center"
+            android:layout_row="3"
+            android:text="@string/less" />
+
+        <TextView
+            android:layout_column="1"
+            android:layout_gravity="center"
+            android:layout_row="0"
+            android:ems="5"
+            android:text="@string/minutes"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        
+        <EditText
+            android:id="@+id/editMinutes"
+            android:layout_column="1"
+            android:layout_gravity="center"
+            android:layout_row="2"
+            android:ems="2"
+            android:inputType="number"
+            android:text="@string/zerozero" />
+
+        <Button
+            android:id="@+id/button_minute_add"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_column="1"
+            android:layout_gravity="center"
+            android:layout_row="1"
+            android:text="@string/more" />
+
+        <Button
+            android:id="@+id/button_minute_rem"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_column="1"
+            android:layout_gravity="center"
+            android:layout_row="3"
+            android:text="@string/less" />
+
+        <TextView
+            android:layout_column="2"
+            android:layout_gravity="center"
+            android:layout_row="0"
+            android:ems="5"
+            android:text="@string/secondes"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <EditText
+            android:id="@+id/editSeconds"
+            android:layout_column="2"
+            android:layout_gravity="center"
+            android:layout_row="2"
+            android:ems="2"
+            android:inputType="number"
+            android:text="@string/zerozero" />
+
+        <Button
+            android:id="@+id/button_second_add"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_column="2"
+            android:layout_gravity="center"
+            android:layout_row="1"
+            android:text="@string/more" />
+
+        <Button
+            android:id="@+id/button_second_rem"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_column="2"
+            android:layout_gravity="center"
+            android:layout_row="3"
+            android:text="@string/less" />
+    </GridLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="4dip"
+            android:layout_marginRight="4dip"
+            android:background="?android:attr/dividerVertical" />
+
+        <Button
+            android:id="@+id/button_time_picker_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="@string/rem_timer" />
+        <!--
+			android:layout_toRightOf="@id/time_picker_helper2"
+			android:layout_toRightOf="@id/time_picker_helper1"
+        -->
+
+        <Button
+            android:id="@+id/BtnColorPickerCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/OK" />
-    </LinearLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@id/button_time_picker_remove"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="@android:string/cancel" />
+
+        <Button
+            android:id="@+id/BtnColorPickerOk"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/button_time_picker_remove"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="@android:string/ok" />
+    </RelativeLayout>
 
 </LinearLayout>

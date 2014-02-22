@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Locale;
 
+import fr.lint.utimer.TimePickerDialogFragment.OnTimePickListener;
 import fr.lint.utimer.util.Monitor;
 import fr.lint.utimer.util.Time;
 import fr.lint.utimer.util.TimerAlert;
@@ -17,7 +18,6 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,9 +27,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
-public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSetListener, TimerAlert {
+public class TimerActivity extends Activity implements OnTimePickListener, TimerAlert {
 	TextView timerView = null;
 	ProgressBar timerProgressView = null;
 	ArrayList<TimerButton> buttons = new ArrayList<TimerButton>();
@@ -143,7 +142,7 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 	
 	public boolean addTimerButton ( final int hours, final int minutes, final int seconds)
 	{
-		final LinearLayout buttonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
+		LinearLayout buttonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
 
 		TimerButton dynaButton = new TimerButton(this, hours, minutes, seconds);
 		
@@ -155,6 +154,8 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 	
 	public void showTimePickDialog( TimerButton button) {
 		
+		lastButtonEdited = button.getPosition();
+
 		// DialogFragment.show() will take care of adding the fragment
 		// in a transaction.  We also want to remove any currently showing
 		// dialog, so make our own transaction and take care of that here.
@@ -165,23 +166,9 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 		}
 		ft.addToBackStack(null);
 		
-		// Prepare args
-		Bundle b = new Bundle();
-		b.putInt(TimePickerDialogFragment.HOUR, button.getHours());
-		b.putInt(TimePickerDialogFragment.MINUTE, button.getMinutes());
-		b.putInt(TimePickerDialogFragment.SECOND, button.getSeconds());
-		lastButtonEdited = button.getPosition();
-
 		// Create and show the dialog.
-		DialogFragment newFragment = new TimePickerDialogFragment();
-		newFragment.setArguments(b);
+		DialogFragment newFragment = TimePickerDialogFragment.newInstance(button.getHours(), button.getMinutes(), button.getSeconds());
 		newFragment.show(ft, "dialog");
-	}
-	
-	@Override
-	public void onTimeSet(TimePicker arg0, int minutes, int seconds) {
-		buttons.get(lastButtonEdited).setTime(0, minutes, seconds);
-		saveTimers();
 	}
 	
 	private void saveTimers()
@@ -199,7 +186,7 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 
 	@Override
 	public void onTimerStop() {
-		// Wake up the screen
+		// TODO Wake up the screen
 //		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 //		pm.wakeUp( System.currentTimeMillis());
 		
@@ -228,7 +215,6 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		
 		setPlayButton(true);
-		
 	}
 
 	@Override
@@ -237,6 +223,30 @@ public class TimerActivity extends Activity implements TimePickerDialog.OnTimeSe
 		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		
 		setPlayButton(true);
+	}
+
+	@Override
+	public void onTimeSet(int hour, int minute, int second) {
+		buttons.get(lastButtonEdited).setTime(hour, minute, second);
+		saveTimers();		
+	}
+
+	@Override
+	public void onRemove() {
+		// Remove the button on screen
+		LinearLayout buttonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
+		buttonLayout.removeView(buttons.get(lastButtonEdited));
 		
+		//Find the button in the list and remove it
+		buttons.remove(lastButtonEdited);
+		
+		// Refresh the positions of all the timer buttons		
+		for( int i = 0; i<buttons.size(); i++)
+		{
+			buttons.get(i).setPosition(i);
+		}
+		
+		// Save the buttons
+		saveTimers();
 	}
 }

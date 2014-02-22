@@ -14,6 +14,13 @@
     <string name="rem_timer">Remove a time</string>
     <string name="add_timer">Add a time</string>
 
-    <string name="OK">OK</string>
+    <string name="more">+</string>
+    <string name="less">-</string>
     
+    <string name="zerozero">00</string>
+    
+    <string name="setup_time">Setup the time</string>
+    <string name="hours">Hours:</string>
+    <string name="minutes">Minutes:</string>
+    <string name="secondes">Seconds:</string>
 </resources>
