@@ -46,7 +46,7 @@ public class Time
 	
 	public int getHours()
 	{
-		return (int) ((time % (60*60*60)) / (60*60));
+		return (int) ((time % (100*60*60)) / (60*60));
 	}
 	public int getMinutes()
 	{
@@ -61,7 +61,7 @@ public class Time
 	
 	public static long getHours(long time)
 	{
-		return (time % (60*60*60)) / (60*60);
+		return (time % (100*60*60)) / (60*60);
 	}
 	public static long getMinutes(long time)
 	{
@@ -75,7 +75,7 @@ public class Time
 
 	public static String toString(long time)
 	{
-		long hours = 	(time % (60*60*60)) / (60*60);
+		long hours = 	(time % (100*60*60)) / (60*60);
 		long minutes = 	(time % (60*60)) / (60);
 		long secs = 	(time % 60);
 		
@@ -91,7 +91,7 @@ public class Time
 	
 	public static long toTime( int hours, int minutes, int seconds)
 	{
-		return hours*60*60 + minutes * 60 + seconds;
+		return hours*60*60 + minutes*60 + seconds;
 	}
 
 }

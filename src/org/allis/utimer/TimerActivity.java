@@ -23,8 +23,6 @@ package org.allis.utimer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Locale;
-
 import org.allis.util.Monitor;
 import org.allis.util.Time;
 import org.allis.util.Timer;
@@ -74,11 +72,7 @@ public class TimerActivity extends Activity implements OnTimePickListener, Timer
 		Monitor refreshTimeView = new Monitor() {
 			@Override
 			public void Refresh(long initialTime, long currentTime) {
-				long hours = 	(currentTime % (60*60*60)) / (60*60);
-				long minutes = 	(currentTime % (60*60)) / (60);
-				long secs = 	(currentTime % 60);
-				String display = String.format( Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, secs); 
-				timerView.setText(display);
+				timerView.setText(Time.toString(currentTime));
 				
 				timerProgressView.setMax( (int) initialTime);
 				timerProgressView.setProgress( (int)(initialTime-currentTime));

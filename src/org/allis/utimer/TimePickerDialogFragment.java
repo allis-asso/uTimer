@@ -141,14 +141,37 @@ public class TimePickerDialogFragment extends DialogFragment implements OnClickL
 	public void onValidation()
 	{
 		// get the time from the buttons
-		int hour = Integer.parseInt(evHour.getText().toString());
-		int minute = Integer.parseInt(evMin.getText().toString());
-		int second = Integer.parseInt(evSec.getText().toString());
+		int hour = validate(evHour.getText().toString(), 99, 0);
+		int minute = validate(evMin.getText().toString(), 59, 0);
+		int second = validate(evSec.getText().toString(), 59, 0);
+		
 		
 		dismissAllowingStateLoss();
 
 		// send the time to the OnTimePickListener
 		listener.onTimeSet(hour, minute, second);
+	}
+	
+	private int validate (String value, int max, int min)
+	{
+		int iValue = 0;
+		try{
+			iValue = Integer.parseInt(value);
+			// If hour is bigger than max hours, set it to max
+			if( iValue >= max)
+			{
+				iValue  =max;
+			}
+			// Lesser than min , set to min
+			if( iValue <= min)
+			{
+				iValue = min;
+			}
+		} catch( NumberFormatException nfe)
+		{
+			nfe.printStackTrace();
+		}
+		return iValue;
 	}
 	
 	public void onCancel()
