@@ -43,9 +43,17 @@ public class TimerButton extends Button {
 		setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Timer timer = Timer.getTimer();
-				timer.setTimer( TimerButton.this.hours, TimerButton.this.minutes, TimerButton.this.seconds);
-				timer.start();
+				// If the button is not set up (time null)
+				if( TimerButton.this.hours+TimerButton.this.minutes+TimerButton.this.seconds == 0 )
+				{
+					context.showTimePickDialog(TimerButton.this);
+				}
+				else
+				{
+					Timer timer = Timer.getTimer();
+					timer.setTimer( TimerButton.this.hours, TimerButton.this.minutes, TimerButton.this.seconds);
+					timer.start();
+				}
 			}
 		});
 
